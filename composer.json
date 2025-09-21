@@ -1,0 +1,18 @@
+{
+    "name": "shklyarik/psa-query-builder",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Psa\\Qb\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Pavel Shklyarik",
+            "email": "shklyarik.pavel@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
