@@ -8,21 +8,69 @@ namespace Psa\Qb;
  */
  class QueryBuilder
  {
+    /**
+     * @var mixed The database connection object.
+     */
     private $connect;
+
+    /**
+     * @var string The SELECT part of the query.
+     */
     private $select = '*';
+
+    /**
+     * @var int|null The LIMIT part of the query.
+     */
     private $limit = null;
+
+    /**
+     * @var int|null The OFFSET part of the query.
+     */
     private $offset = null;
+
+    /**
+     * @var array The WHERE part of the query.
+     */
     private $where = ['and'];
+
+    /**
+     * @var array The HAVING part of the query.
+     */
     private $having = ['and'];
+
+    /**
+     * @var string|array|null The ORDER BY part of the query.
+     */
     private $orderBy = null;
+
+    /**
+     * @var string|array|null The GROUP BY part of the query.
+     */
     private $groupBy = null;
+
+    /**
+     * @var array|null The JOIN part of the query.
+     */
     private $join = null;
+
+    /**
+     * @var bool Whether to use DISTINCT.
+     */
     private $is_distinct = false;
+
+    /**
+     * @var string|null The table name.
+     */
     private $table = null;
+
+    /**
+     * @var array The fields to be treated as JSON.
+     */
     private array $jsonFields = [];
 
     /**
      * Constructor.
+     * @param mixed $connect The database connection object.
      */
     public function __construct($connect)
     {
@@ -31,6 +79,8 @@ namespace Psa\Qb;
 
     /**
      * Sets the FROM part of the query.
+     * @param string $table The table name.
+     * @return self
      */
     public function from($table)
     {
@@ -40,6 +90,7 @@ namespace Psa\Qb;
 
     /**
      * Enable the DISTINCT statement is used to return only distinct (different) values.
+     * @return self
      */
     public function distinct()
     {
@@ -49,6 +100,7 @@ namespace Psa\Qb;
 
     /**
      * Executes the query and returns a single row of result.
+     * @return array|null
      */
     public function one()
     {
@@ -65,6 +117,7 @@ namespace Psa\Qb;
 
     /**
      * Executes the query and returns all results as an array.
+     * @return array
      */
     public function all()
     {
@@ -80,6 +133,7 @@ namespace Psa\Qb;
 
     /**
      * Returns the actual SQL.
+     * @return string
      */
     public function sql()
     {
@@ -91,6 +145,8 @@ namespace Psa\Qb;
 
     /**
      * Sets the LIMIT part of the query.
+     * @param int $limit The limit.
+     * @return self
      */
     public function limit($limit)
     {
@@ -100,6 +156,8 @@ namespace Psa\Qb;
 
     /**
      * Sets the OFFSET part of the query.
+     * @param int $offset The offset.
+     * @return self
      */
     public function offset($offset)
     {
@@ -109,6 +167,8 @@ namespace Psa\Qb;
 
     /**
      * Sets the WHERE part of the query.
+     * @param array|string $condition The condition.
+     * @return self
      */
     public function where($condition)
     {
@@ -118,6 +178,8 @@ namespace Psa\Qb;
 
     /**
      * Sets the WHERE part of the query.
+     * @param array|string $condition The condition.
+     * @return self
      */
     public function having($condition)
     {
@@ -127,6 +189,8 @@ namespace Psa\Qb;
 
     /**
      * Sets the AND WHERE part of the query.
+     * @param array|string $condition The condition.
+     * @return self
      */
     public function andWhere($condition)
     {
@@ -136,6 +200,8 @@ namespace Psa\Qb;
 
     /**
      * Sets the OR WHERE part of the query.
+     * @param array|string $condition The condition.
+     * @return self
      */
     public function orWhere($condition)
     {
@@ -145,6 +211,8 @@ namespace Psa\Qb;
 
     /**
      * Prepare array for condition.
+     * @param array $where The where condition.
+     * @return array
      */
     private function prepareWhere($where)
     {
@@ -181,6 +249,9 @@ namespace Psa\Qb;
 
     /**
      * Recursive parse where conditions.
+     * @param array $condition The condition.
+     * @param bool $canBrackets Whether to use brackets.
+     * @return string
      */
     private function parseCondition($condition, $canBrackets = false)
     {
@@ -256,8 +327,9 @@ namespace Psa\Qb;
         return $sql;
     }
 
-    /*
+    /**
      * Returns string with part of where query.
+     * @return string
      */
     private function whereSql()
     {
@@ -265,8 +337,9 @@ namespace Psa\Qb;
         return $where === '' ? '' : ' WHERE ' . $where;
     }
 
-    /*
+    /**
      * Returns string with part of having query.
+     * @return string
      */
     private function havingSql()
     {
@@ -276,6 +349,8 @@ namespace Psa\Qb;
 
     /**
      * Sets the SELECT part of the query.
+     * @param string|array $select The select part of the query.
+     * @return self
      */
     public function select($select)
     {
@@ -285,6 +360,9 @@ namespace Psa\Qb;
 
     /**
      * Appends a LEFT OUTER JOIN part to the query.
+     * @param string $table The table name.
+     * @param string $condition The join condition.
+     * @return self
      */
     public function leftJoin($table, $condition)
     {
@@ -299,6 +377,9 @@ namespace Psa\Qb;
 
     /**
      * Appends an INNER JOIN part to the query.
+     * @param string $table The table name.
+     * @param string $condition The join condition.
+     * @return self
      */
     public function innerJoin($table, $condition)
     {
@@ -313,6 +394,9 @@ namespace Psa\Qb;
 
     /**
      * Appends a RIGHT OUTER JOIN part to the query.
+     * @param string $table The table name.
+     * @param string $condition The join condition.
+     * @return self
      */
     public function rightJoin($table, $condition)
     {
@@ -327,6 +411,8 @@ namespace Psa\Qb;
 
     /**
      * Sets the ORDER BY part of the query.
+     * @param string|array $orderBy The order by part of the query.
+     * @return self
      */
     public function orderBy($orderBy)
     {
@@ -336,6 +422,8 @@ namespace Psa\Qb;
 
     /**
      * Sets the GROUP BY part of the query.
+     * @param string|array $groupBy The group by part of the query.
+     * @return self
      */
     public function groupBy($groupBy)
     {
@@ -343,8 +431,9 @@ namespace Psa\Qb;
         return $this;
     }
 
-    /*
+    /**
      * Returns string with part of SELECT query.
+     * @return string
      */
     private function selectSql()
     {
@@ -368,8 +457,9 @@ namespace Psa\Qb;
         return ' ' . $this->select;
     }
 
-    /*
+    /**
      * Returns string with part of JOIN query.
+     * @return string
      */
     private function joinSql()
     {
@@ -386,8 +476,9 @@ namespace Psa\Qb;
         return ' ' . trim($sql);
     }
 
-    /*
+    /**
      * Returns string with part of ORDER BY query.
+     * @return string
      */
     private function orderBySql()
     {
@@ -411,8 +502,9 @@ namespace Psa\Qb;
         return trim($sql_part) !== '' ? ' ORDER BY ' . $sql_part : '';
     }
 
-    /*
+    /**
      * Returns string with part of GROUP BY query.
+     * @return string
      */
     private function groupBySql()
     {
@@ -429,8 +521,9 @@ namespace Psa\Qb;
         return trim($sql_part) !== '' ? ' GROUP BY ' . $sql_part : '';
     }
 
-    /*
+    /**
      * Returns string with part of LIMIT query.
+     * @return string
      */
     private function limitSql()
     {
@@ -445,8 +538,9 @@ namespace Psa\Qb;
         return $sql_part;
     }
 
-    /*
+    /**
      * Returns string with part of LIMIT query.
+     * @return string
      */
     private function distinctSql()
     {
@@ -459,6 +553,7 @@ namespace Psa\Qb;
 
     /**
      * Executes the query and returns the first column of the result.
+     * @return array|null
      */
     public function column()
     {
@@ -475,6 +570,7 @@ namespace Psa\Qb;
 
     /**
      * Returns the query result as a scalar value.
+     * @return mixed|null
      */
     public function scalar()
     {
@@ -487,8 +583,9 @@ namespace Psa\Qb;
         return null;
     }
 
-    /*
+    /**
      * Return count value.
+     * @return int|null
      */
     public function count()
     {
@@ -506,6 +603,11 @@ namespace Psa\Qb;
         return null;
     }
 
+    /**
+     * Generates the SQL for an UPDATE statement.
+     * @param array $data The data to be updated.
+     * @return string
+     */
     public function updateSql($data)
     {
         $pairs = '';
@@ -534,14 +636,21 @@ namespace Psa\Qb;
         return 'UPDATE ' . $this->table . ' SET ' . $pairs . $this->whereSql();
     }
 
-    /*
+    /**
      * Update records in database.
+     * @param array $data The data to be updated.
+     * @return mixed
      */
     public function update($data)
     {
         return $this->connect->query($this->updateSql($data));
     }
 
+    /**
+     * Generates the SQL for an INSERT statement.
+     * @param array $data The data to be inserted.
+     * @return string
+     */
     public function insertSql($data)
     {
         $columns = '';
@@ -572,40 +681,77 @@ namespace Psa\Qb;
         return 'INSERT INTO ' . $this->table . ' (' . $columns . ') VALUES (' . $values . ')';
     }
 
+    /**
+     * Inserts a new record into the database.
+     * @param array $data The data to be inserted.
+     * @return mixed
+     */
     public function insert($data)
     {
         $this->connect->query($this->insertSql($data));
         return $this->connect->getLastID();
     }
 
+    /**
+     * Generates the SQL for a DELETE statement.
+     * @return string
+     */
     public function deleteSql()
     {
         return 'DELETE FROM ' . $this->table . $this->whereSql();
     }
 
+    /**
+     * Deletes records from the database.
+     * @return mixed
+     */
     public function delete()
     {
         return $this->connect->query($this->deleteSql());
     }
 
+    /**
+     * Executes a raw SQL query.
+     * @param string $sql The SQL query to execute.
+     * @return mixed
+     */
     public function execute($sql)
     {
         return $this->connect->execute($sql);
     }
 
+    /**
+     * Quotes a string for use in a query.
+     * @param string $value The value to quote.
+     * @return string
+     */
     public function quote($value)
     {
         return $this->connect->quote($value);
     }
 
+    /**
+     * Specifies which fields should be treated as JSON.
+     * @param array $fields The fields to be treated as JSON.
+     * @return self
+     */
     public function asJson(array $fields)
     {
         $this->jsonFields = $fields;
         return $this;
     }
 
-    private function decodeJsonFields(array $row): array
+    /**
+     * Decodes JSON fields in a row.
+     * @param array|null $row The row to decode.
+     * @return array|null
+     */
+    private function decodeJsonFields(?array $row): ?array
     {
+        if ($row === null) {
+            return null;
+        }
+
         foreach ($this->jsonFields as $field) {
             if (isset($row[$field]) && is_string($row[$field])) {
                 $decoded = json_decode($row[$field], true);
