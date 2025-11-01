@@ -167,12 +167,14 @@ namespace Psa\Qb;
 
     /**
      * Sets the WHERE part of the query.
-     * @param array|string $condition The condition.
+     * @param array|string|null $condition The condition.
      * @return self
      */
     public function where($condition)
     {
-        $this->where[] = ['and', $condition];
+        if ($condition !== null) {
+            $this->where[] = ['and', $condition];
+        }
         return $this;
     }
 
